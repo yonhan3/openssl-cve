@@ -1,0 +1,4 @@
+Fixed:
+ CVE-2020-1971:
+  src_files:
+   - crypto/x509v3/v3_genn.c

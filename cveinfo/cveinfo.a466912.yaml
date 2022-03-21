@@ -1,0 +1,4 @@
+Fixed:
+ CVE-2022-0778:
+  src_files:
+   - crypto/bn/bn_sqrt.c

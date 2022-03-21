@@ -1,0 +1,4 @@
+Fixed:
+ CVE-2021-3450:
+  src_files:
+   - crypto/x509/x509_vfy.c

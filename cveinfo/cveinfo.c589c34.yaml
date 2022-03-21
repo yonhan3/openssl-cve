@@ -1,0 +1,4 @@
+Added:
+ CVE-2021-3449:
+  src_files:
+   - ssl/statem/extensions.c
