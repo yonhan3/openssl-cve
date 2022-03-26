@@ -1,0 +1,55 @@
+CVE-2021-3449:
+ ssl/statem/extensions.c:
+  include:
+   - "static int init_sig_algs_cert(SSL *s, unsigned int context)"
+   - "OPENSSL_free(s->s3->tmp.peer_cert_sigalgs);"
+   - "s->s3->tmp.peer_cert_sigalgs = NULL;"
+  exclude:
+   - "s->s3->tmp.peer_sigalgslen = 0;"
+CVE-2020-1967:
+ ssl/t1_lib.c:
+  include:
+   - "if (sig_nid == sigalg->sigandhash)"
+   - "? tls1_lookup_sigalg(s->s3.tmp.peer_cert_sigalgs[i])"
+  exclude:
+   - "if (sigalg != NULL && sig_nid == sigalg->sigandhash)"
+CVE-2020-1971:
+ crypto/x509v3/v3_genn.c:
+  include:
+   - "int GENERAL_NAME_cmp(GENERAL_NAME *a, GENERAL_NAME *b)"
+   - "result = ASN1_TYPE_cmp(a->d.other, b->d.other);"
+  exclude:
+   - "static int edipartyname_cmp(const EDIPARTYNAME *a, const EDIPARTYNAME *b)"
+CVE-2021-3450:
+ crypto/x509/x509_vfy.c:
+  include:
+   - "static int check_chain_extensions(X509_STORE_CTX *ctx)"
+   - "if ((ctx->param->flags & X509_V_FLAG_X509_STRICT) && num > 1) {"
+  exclude:
+   - "&& (ctx->param->flags & X509_V_FLAG_X509_STRICT) && num > 1) {"
+CVE-2021-3711:
+ crypto/sm2/sm2_crypt.c:
+  exclude:
+   - "int sm2_plaintext_size(const unsigned char *ct, size_t ct_size, size_t *pt_size)"
+  include:
+   - "int sm2_plaintext_size(const EC_KEY *key, const EVP_MD *digest, size_t msg_len,"
+   - "const size_t field_size = ec_field_size(EC_KEY_get0_group(key));"
+   - "overhead = 10 + 2 * field_size + (size_t)md_size;"
+CVE-2014-0160:
+ ssl/d1_both.c:
+  include:
+   - "dtls1_process_heartbeat(SSL *s)"
+   - "r = dtls1_write_bytes(s, TLS1_RT_HEARTBEAT, buffer, 3 + payload + padding);"
+ ssl/t1_lib.c:
+  exclude:
+   - "return 0; /* silently discard per RFC 6520 sec. 4 */"
+  include:
+   - "tls1_process_heartbeat(SSL *s)"
+   - "r = ssl3_write_bytes(s, TLS1_RT_HEARTBEAT, buffer, 3 + payload + padding);"
+CVE-2022-0778:
+ crypto/bn/bn_sqrt.c:
+  include:
+   - "BIGNUM *BN_mod_sqrt(BIGNUM *in, const BIGNUM *a, const BIGNUM *p, BN_CTX *ctx)"
+   - "if (!BN_is_odd(p) || BN_abs_is_word(p, 1))"
+  exclude:
+   - "/* Find the smallest i, 0 < i < e, such that b^(2^i) = 1. */"

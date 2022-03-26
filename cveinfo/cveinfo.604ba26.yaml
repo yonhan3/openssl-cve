@@ -1,0 +1,4 @@
+Added:
+ CVE-2020-1967:
+  src_files:
+   - ssl/t1_lib.c
