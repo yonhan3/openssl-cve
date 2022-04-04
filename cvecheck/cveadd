@@ -42,7 +42,7 @@ CVE-2014-0160:
    - "r = dtls1_write_bytes(s, TLS1_RT_HEARTBEAT, buffer, 3 + payload + padding);"
  ssl/t1_lib.c:
   exclude:
-   - "return 0; /* silently discard per RFC 6520 sec. 4 */"
+   - "/* silently discard per RFC 6520 sec. 4 */"
   include:
    - "tls1_process_heartbeat(SSL *s)"
    - "r = ssl3_write_bytes(s, TLS1_RT_HEARTBEAT, buffer, 3 + payload + padding);"

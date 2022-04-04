@@ -43,7 +43,7 @@ CVE-2014-0160:
    - "/* Read type and payload length first */"
    - "if (1 + 2 + 16 > s->s3->rrec.length)"
    - "if (1 + 2 + payload + 16 > s->s3->rrec.length)"
-   - "return 0; /* silently discard per RFC 6520 sec. 4 */"
+   - "/* silently discard per RFC 6520 sec. 4 */"
 CVE-2022-0778:
  crypto/bn/bn_sqrt.c:
   include:

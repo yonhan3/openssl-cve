@@ -1,0 +1,4 @@
+Fixed:
+ CVE-2021-3711:
+  src_files:
+   - crypto/sm2/sm2_crypt.c
