@@ -2,9 +2,12 @@ CVE-2021-3449:
  ssl/statem/extensions.c:
   include:
    - "static int init_sig_algs_cert(SSL *s, unsigned int context)"
-   - "OPENSSL_free(s->s3->tmp.peer_cert_sigalgs);"
-   - "s->s3->tmp.peer_cert_sigalgs = NULL;"
-   - "s->s3->tmp.peer_sigalgslen = 0;"
+   - "OPENSSL_free(s->s3->tmp.peer_cert_sigalgs);":
+      - "OPENSSL_free(s->s3.tmp.peer_cert_sigalgs);"
+   - "s->s3->tmp.peer_cert_sigalgs = NULL;":
+      - "s->s3.tmp.peer_cert_sigalgs = NULL;"
+   - "s->s3->tmp.peer_sigalgslen = 0;":
+      - "s->s3.tmp.peer_sigalgslen = 0;"
 CVE-2020-1967:
  ssl/t1_lib.c:
   include:
@@ -25,7 +28,7 @@ CVE-2021-3450:
 CVE-2021-3711:
  crypto/sm2/sm2_crypt.c:
   include:
-   - "int sm2_plaintext_size(const unsigned char *ct, size_t ct_size, size_t *pt_size)"
+   - "sm2_plaintext_size(const unsigned char *ct, size_t ct_size,"
    - "sm2_ctext = d2i_SM2_Ciphertext(NULL, &ct, ct_size);"
    - "*pt_size = sm2_ctext->C2->length;"
   exclude:
