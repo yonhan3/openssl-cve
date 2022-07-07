@@ -1,9 +1,24 @@
 # openssl-cve
+
+Table of Contents
+-----------------
+* [Overview](#Overview)
+* [YAML Format Proposal for CVE Git Commits](#YAML-Format-Proposal-for-CVE-Git-Commits)
+* [YAML Format Proposal for CVE Checking Rules](#YAML-Format-Proposal-for-CVE-Checking-Rules)
+* [Help is Needed from OpenSSL Developers](#Help-is-Needed-from-OpenSSL-Developers)
+
+
+Overview
+--------
+
 CVE info of GIT commits for OpenSSL
 
 This repo provides CVE info of GIT commits for the [OpenSSL](https://github.com/openssl/openssl) git repo.
 Such CVE info can be used by the [bomsh](https://github.com/git-bom/bomsh) tool to create the CVE database for OpenSSL,
 which is then used to extract accurate CVE knowledge for OpenSSL binaries.
+
+YAML Format Proposal for CVE Git Commits
+----------------------------------------
 
 The following YAML format is proposed for a git commit related to CVE.
 
@@ -78,6 +93,9 @@ Therefore, we should be able to get the full knowledge of CVE info for all the e
 
 The cveinfo files for the heartbleed CVE-2014-0160 in 2014 and the 6 high severity CVEs for OpenSSL since 2020 have been added to this repo.
 
+YAML Format Proposal for CVE Checking Rules
+-------------------------------------------
+
 Some Linux distros apply patches on top of the official OpenSSL release, and sometimes create new blob IDs that do not exist in the OpenSSL official git repo.
 This creates a scenario that bomsh_search_cve.py script will fail to find a matching blob_id in the OpenSSL CVE database, thus failing to report some relevant CVEs.
 To solve this issue, some simple string inclusion/exclusion checks can be performed for these newly created source files, to determine if a source is vulnerable to or fixed for the CVE.
@@ -119,9 +137,30 @@ CVE-2020-1967:
    - "if (sig_nid == sigalg->sigandhash)"
 ```
 
-A new bomsh script will be developed to utilize the CVE checking rules to cover more blob IDs, providing more accurate CVE results.
+It also allows the existence of one of multiple strings to pass the rule. In the below example, the
+"s->s3->tmp.peer_cert_sigalgs = NULL;" string and the "s->s3.tmp.peer_cert_sigalgs = NULL;" string are
+equivalent in the source file for this include rule to pass. More such equivalent strings can be added to the list
+to provide flexibility in defining the CVE checking rules.
 
-OpenSSL developers are encouraged to provide more CVE commits info, so that we can update this openssl-cve repo with more complete CVE commits info.
+```
+CVE-2021-3449:
+ ssl/statem/extensions.c:
+  include:
+   - "static int init_sig_algs_cert(SSL *s, unsigned int context)"
+   - "OPENSSL_free(s->s3->tmp.peer_cert_sigalgs);":
+      - "OPENSSL_free(s->s3.tmp.peer_cert_sigalgs);"
+   - "s->s3->tmp.peer_cert_sigalgs = NULL;":
+      - "s->s3.tmp.peer_cert_sigalgs = NULL;"
+   - "s->s3->tmp.peer_sigalgslen = 0;":
+      - "s->s3.tmp.peer_sigalgslen = 0;"
+```
+
+The bomsh scripts have been updated to utilize the CVE checking rules to cover more blob IDs, providing more accurate CVE results.
+
+Help is Needed from OpenSSL Developers
+--------------------------------------
+
+OpenSSL developers are encouraged to provide more such CVE commits info, so that we can update this openssl-cve repo with more complete CVE commits info.
 For all the new OpenSSL CVEs, if OpenSSL developers can also help identify the CVE-add git commit, then we can easily create the cveinfo.*.yaml files and upload to this openssl-cve repo.
 And with the bomsh tool, we will be able to more accurately track CVEs for OpenSSL.
 
